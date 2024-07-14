@@ -17,6 +17,8 @@ class CreateTabController: UIViewController {
     
     public var completion: ((String, String) -> Void)?
     
+    var homeTabController: HomeTabController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         titleField.becomeFirstResponder()
@@ -29,6 +31,16 @@ class CreateTabController: UIViewController {
                    let detailText = detailField.text, !detailText.isEmpty {
                     completion?(titleText, detailText)
         }
+//        
+//        guard let titleText = titleField.text, !titleText.isEmpty,
+//                let detailText = detailField.text, !detailText.isEmpty else {
+//                return
+//               }
+//               
+//        homeTabController?.models.append("\(title): \(titleField)", "\(detail): \(detailField)")
+//        titleField.text = ""
+//        detailField.text = ""
+//               tabBarController?.selectedIndex = 0
     }
 
 

@@ -14,7 +14,7 @@ class HomeTabController: UIViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet var table: UITableView!
     @IBOutlet var label: UILabel!
     
-    var models: [(title: String, article: String)] = []
+    var models: [(title: String, detail: String)] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,10 +28,20 @@ class HomeTabController: UIViewController, UITableViewDelegate, UITableViewDataS
         guard let vc = storyboard?.instantiateViewController(withIdentifier: "new") as? CreateTabController else {
             return
         }
-//        vc.title = "New Article"
-//        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
      
-        tabBarController?.selectedIndex = 1
+//        guard let vc =  tabBarController?.selectedIndex = 1 else {
+//            return
+//        }
+        
+        vc.completion = { articleTitle, article in
+            self.navigationController?.popViewController(animated: true)
+            self.models.append((title: articleTitle, detail: article))
+            self.label.isHidden = true
+            self.table.isHidden = false
+            self.table.reloadData()
+
+        }
     }
     //table
     
@@ -42,7 +52,7 @@ class HomeTabController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = models[indexPath.row].title
-        cell.detailTextLabel?.text = models[indexPath.row].article
+        cell.detailTextLabel?.text = models[indexPath.row].detail
         return cell
     }
     
@@ -50,11 +60,14 @@ class HomeTabController: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.deselectRow(at: indexPath, animated: true)
         
         // show note controller
-        
+        let model = models[indexPath.row]
         guard let vc = storyboard?.instantiateViewController(withIdentifier: "article") as? ArticleViewController else{
             return
         }
         vc.title = "Article"
+        vc.navigationItem.largeTitleDisplayMode = .never
+        vc.articleTitle = model.title
+        vc.article = model.detail
         navigationController?.pushViewController(vc, animated: true)
     }
 }
