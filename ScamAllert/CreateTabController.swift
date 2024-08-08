@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class CreateTabController: UIViewController {
-
+    
     @IBOutlet var titleField: UITextField!
     @IBOutlet var detailField: UITextField!
     @IBOutlet var phoneNumField: UITextField!
@@ -22,26 +22,21 @@ class CreateTabController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         titleField.becomeFirstResponder()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(didTapSave))
+        
     }
     
-
-    @objc func didTapSave() {
-        if let titleText = titleField.text, !titleText.isEmpty,
-                   let detailText = detailField.text, !detailText.isEmpty {
-                    completion?(titleText, detailText)
+    @IBAction func didTapSave(_ sender: Any) {
+        
+        guard let titleText = titleField.text, !titleText.isEmpty,
+              let detailText = detailField.text, !detailText.isEmpty else {
+            return
         }
-//        
-//        guard let titleText = titleField.text, !titleText.isEmpty,
-//                let detailText = detailField.text, !detailText.isEmpty else {
-//                return
-//               }
-//               
-//        homeTabController?.models.append("\(title): \(titleField)", "\(detail): \(detailField)")
-//        titleField.text = ""
-//        detailField.text = ""
-//               tabBarController?.selectedIndex = 0
+        
+        // Pass the data back using the completion closure
+        completion?(titleText, detailText)
+        
+        // Dismiss the view controller after saving
+        navigationController?.popViewController(animated: true)
     }
-
-
+    
 }
